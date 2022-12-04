@@ -11,8 +11,8 @@ class ModelMobileNetv2(torch.nn.Module):
     def __init__(self, trainingFolderPath="", testFolderPath="",batch_size=2):
         super().__init__()
         self.device = "cuda" if torch.cuda.is_available() else "cpu"#Verificamos si el equipo cuenta con CUDA
-        self.trainningFolder = trainingFolderPath
-        self.testFolder = testFolderPath
+        self.trainning_folder = trainingFolderPath
+        self.test_folder = testFolderPath
         self.model = mobilenet_v2(weights=MobileNet_V2_Weights.IMAGENET1K_V2)
 
         #Congelamos los parametros
@@ -27,10 +27,10 @@ class ModelMobileNetv2(torch.nn.Module):
         self.model.optimizer = self.optimizer#Añadimos el optimizador al modelo
         self.loss_function = torch.nn.CrossEntropyLoss()#Definimos la funcion de perdida
         self.batch_size = batch_size
-        self.training_dataset = datasets.ImageFolder(root=self.trainningFolder,#Obtenemos el dataset
+        self.training_dataset = datasets.ImageFolder(root=self.trainning_folderolder,#Obtenemos el dataset
                                                      transform=self.imageTransform(),
                                                      target_transform=None)
-        self.test_dataset = datasets.ImageFolder(root=self.testFolder,
+        self.test_dataset = datasets.ImageFolder(root=self.test_folder,
                                                  transform=self.imageTransform())#Obtenemos el dataset de test
         self.training_dataloader = DataLoader(dataset=self.training_dataset, #Creamos el DataLoader
                                               batch_size=self.batch_size,
@@ -52,8 +52,7 @@ class ModelMobileNetv2(torch.nn.Module):
 
         self.categories = {
                             0: 'drowsiness',
-                            1: 'drowsiness-yawning',
-                            2: 'no-drowsiness'
+                            1: 'no-drowsiness'
                           }
     def imageTransform(self):
         return transforms.Compose([
@@ -193,7 +192,3 @@ class ModelMobileNetv2(torch.nn.Module):
                 totalPredictions += 1
 
         print(str(correctPredictions)+"--"+str(totalPredictions))
-
-
-
-
